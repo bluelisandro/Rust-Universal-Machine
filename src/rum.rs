@@ -1,3 +1,20 @@
+type Register = u32;
+
+pub static r0: Register = 0;
+pub static r1: Register = 0;
+pub static r2: Register = 0;
+pub static r3: Register = 0;
+pub static r4: Register = 0;
+pub static r5: Register = 0;
+pub static r6: Register = 0;
+pub static r7: Register = 0;
+
+// Segments vector, where each vector represents an i'th segment
+    // Each i'th segment is a vector containing u32 words
+        // Inside each i'th segment, the n'th offset can be accessed within that segment's vector at the n'th index
+type Segment = Vec<u32>;
+static segments: Vec<Segment> = Vec::new();
+
 type Umi = u32;
 pub struct Field {
     width: u32,
@@ -42,13 +59,9 @@ pub fn op(instruction: Umi) -> u32 {
 }
 
 pub fn disassemble(inst: Umi) -> String {
-    let A = get(&RA, inst);
-    let B = get(&RA, inst);
-    let C = get(&RA, inst);
     
     match get(&OP, inst) {
         o if o == Opcode::CMov as u32 => {
-            // conditional_move(get(&RA, inst), get(&RB, inst), get(&RC, inst))
             format!(
                 "if (r{} != 0) r{} := r{};",
                 get(&RC, inst),
