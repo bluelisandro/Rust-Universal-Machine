@@ -1,5 +1,5 @@
-use Rust_Universal_Machine::rumdump::rumdis;
-use Rust_Universal_Machine::rumdump::rumload;
+use Rust_Universal_Machine::rumload;
+use Rust_Universal_Machine::rumdis;
 use std::env;
 
 fn main() {

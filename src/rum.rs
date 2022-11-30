@@ -59,7 +59,6 @@ pub fn op(instruction: Umi) -> u32 {
 }
 
 pub fn disassemble(inst: Umi) -> String {
-    
     match get(&OP, inst) {
         o if o == Opcode::CMov as u32 => {
             format!(

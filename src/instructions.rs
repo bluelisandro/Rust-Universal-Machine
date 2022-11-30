@@ -1,32 +1,37 @@
-fn conditional_move() {
+// if r[c] != 0, then r[A] := r[B]
+pub fn conditional_move(A: u32, B: u32, C: u32) {
     
 }
 
-fn segmented_load() {
+// r[a] := m[r[B]][r[C]]
+pub fn segmented_load() {
     
 }
 
-fn segmented_store() {
+// m[r[A]][r[B]] := r[C]
+pub fn segmented_store() {
     
 }
 
-fn addition() {
+// r[A] := (r[B] + r[C]) mod 2^32
+pub fn addition() {
     
 }
 
-fn multiplication() {
+// r[A] := (r[B] + r[C]) mod 2^32
+pub fn multiplication() {
     
 }
 
-fn division() {
+pub fn division() {
     
 }
 
-fn bitwise_nand() {
+pub fn bitwise_nand() {
     
 }
 
-fn halt() {
+pub fn halt() {
     
 }
 
@@ -35,7 +40,7 @@ fn halt() {
 // new segment is initialized to zero. A bit pattern
 // that is not all zeroes and does not identify any
 // currently mapped segment is placed in $r[B]
-fn map_segment() {
+pub fn map_segment() {
     
 }
 
@@ -43,6 +48,6 @@ fn map_segment() {
 // The segment $m[$r[C]] is unmapped.
 // Future Map Segment instructions may reuse the
 // identifier $r[C].
-fn unmap_segment() {
+pub fn unmap_segment() {
     
 }
