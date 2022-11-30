@@ -1,5 +1,3 @@
-use crate::instructions;
-
 type Umi = u32;
 pub struct Field {
     width: u32,
@@ -15,25 +13,25 @@ static OP: Field = Field { width: 4, lsb: 28 }; // Opcode
 
 #[derive(Debug, PartialEq, Clone, Copy)]
 enum Opcode {
-    CMov,           // 0
-    Load,           // 1
-    Store,          // 2
-    Add,            // 3
-    Mul,            // 4
-    Div,            // 5
-    Nand,           // 6
-    Halt,           // 7
-    MapSegment,     // 8
-    UnmapSegment,   // 9
-    Output,         // 10
-    Input,          // 11
-    LoadProgram,    // 12
-    LoadValue,      // 13
+    CMov,         // 0
+    Load,         // 1
+    Store,        // 2
+    Add,          // 3
+    Mul,          // 4
+    Div,          // 5
+    Nand,         // 6
+    Halt,         // 7
+    MapSegment,   // 8
+    UnmapSegment, // 9
+    Output,       // 10
+    Input,        // 11
+    LoadProgram,  // 12
+    LoadValue,    // 13
 }
 
 fn mask(bits: u32) -> u32 {
     (1 << bits) - 1
-} 
+}
 
 pub fn get(field: &Field, instruction: Umi) -> u32 {
     (instruction >> field.lsb) & mask(field.width)
@@ -44,13 +42,8 @@ pub fn op(instruction: Umi) -> u32 {
 }
 
 pub fn disassemble(inst: Umi) -> String {
-    let A = get(&RA, inst);
-    let B = get(&RA, inst);
-    let C = get(&RA, inst);
-    
     match get(&OP, inst) {
         o if o == Opcode::CMov as u32 => {
-            instructions::conditional_move(A, B, C);
             format!(
                 "if (r{} != 0) r{} := r{};",
                 get(&RC, inst),
@@ -60,17 +53,11 @@ pub fn disassemble(inst: Umi) -> String {
         }
 
         o if o == Opcode::Load as u32 => {
-            format!(
-                "Load r{};",
-                get(&RL, inst),
-            )
+            format!("Load r{};", get(&RL, inst),)
         }
 
         o if o == Opcode::Store as u32 => {
-            format!(
-                "Store r{};",
-                get(&VL, inst),
-            )
+            format!("Store r{};", get(&VL, inst),)
         }
 
         o if o == Opcode::Add as u32 => {
@@ -110,53 +97,33 @@ pub fn disassemble(inst: Umi) -> String {
         }
 
         o if o == Opcode::Halt as u32 => {
-            format!(
-                "HALT;"
-            )
+            format!("HALT;")
         }
 
         o if o == Opcode::MapSegment as u32 => {
-            format!(
-                "MAP SEG r{};",
-                get(&RC, inst),
-            )
+            format!("MAP SEG r{};", get(&RC, inst),)
         }
 
         o if o == Opcode::UnmapSegment as u32 => {
-            format!(
-                "UNMAP r{};",
-                get(&RC, inst),
-            )
+            format!("UNMAP r{};", get(&RC, inst),)
         }
 
         o if o == Opcode::Output as u32 => {
-            format!(
-                "OUTPUT: r{};",
-                get(&RC, inst),
-            )
+            format!("OUTPUT: r{};", get(&RC, inst),)
         }
 
         o if o == Opcode::Input as u32 => {
-            format!(
-                "INPUT: r{};",
-                get(&RC, inst),
-            )
+            format!("INPUT: r{};", get(&RC, inst),)
         }
 
         o if o == Opcode::LoadProgram as u32 => {
-            format!(
-                "LOAD PROGRAM r{};",
-                get(&RB, inst)
-            )
+            format!("LOAD PROGRAM r{};", get(&RB, inst))
         }
 
         o if o == Opcode::LoadValue as u32 => {
-            format!(
-                "LOAD VALUE r{};",
-                get(&VL, inst),
-            )
+            format!("LOAD VALUE r{};", get(&VL, inst),)
         }
-        
-        _ => format!("ERROR: INVALID OPCODE!")
+
+        _ => format!("ERROR: INVALID OPCODE!"),
     }
 }

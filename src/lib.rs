@@ -1,5 +1,5 @@
 pub mod bitpack;
-pub mod rum;
-pub mod rumdis;
-pub mod rumload;
+pub mod disassembler;
 pub mod instructions;
+pub mod rum;
+pub mod rumload;
