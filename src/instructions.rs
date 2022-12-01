@@ -1,23 +1,10 @@
-use crate::bitpack;
-use crate::rum;
-
-pub struct Field {
-    width: u32,
-    lsb: u32,
-}
-
-static RA: Field = Field { width: 3, lsb: 6 }; // A value
-static RB: Field = Field { width: 3, lsb: 3 }; // B value
-static RC: Field = Field { width: 3, lsb: 0 }; // C value
-static RL: Field = Field { width: 3, lsb: 25 }; // Load program location
-static VL: Field = Field { width: 25, lsb: 0 }; // Value
-static OP: Field = Field { width: 4, lsb: 28 }; // Opcode
+use crate::rum::UniversalMachine;
 
 // if r[c] != 0, then r[A] := r[B]
-pub fn conditional_move(A: u32, B: u32, C: u32) {
-    // if r[0] != 0 {
-    //     r[A_val as usize] = r[B_val as usize];
-    // }
+pub fn conditional_move(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
+    if UM.registers[0] != 0 {
+        UM.registers[A as usize] = UM.registers[B as usize];
+    }
 }
 
 // r[a] := m[r[B]][r[C]]

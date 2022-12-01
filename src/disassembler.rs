@@ -41,7 +41,8 @@ pub fn op(instruction: Umi) -> u32 {
     (instruction >> OP.lsb) & mask(OP.width)
 }
 
-pub fn disassemble(inst: Umi) -> String {
+use crate::rum::UniversalMachine;
+pub fn disassemble(UM: &mut UniversalMachine, inst: Umi) -> String {
     use crate::instructions;
 
     let A_val = get(&RA, inst);
@@ -50,7 +51,7 @@ pub fn disassemble(inst: Umi) -> String {
 
     match get(&OP, inst) {
         o if o == Opcode::CMov as u32 => {
-            instructions::conditional_move(A_val, B_val, C_val);
+            instructions::conditional_move(UM, A_val, B_val, C_val);
             format!(
                 "if (r{} != 0) r{} := r{};",
                 get(&RC, inst),
