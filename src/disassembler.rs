@@ -42,8 +42,15 @@ pub fn op(instruction: Umi) -> u32 {
 }
 
 pub fn disassemble(inst: Umi) -> String {
+    use crate::instructions;
+
+    let A_val = get(&RA, inst);
+    let B_val = get(&RB, inst);
+    let C_val = get(&RC, inst);
+
     match get(&OP, inst) {
         o if o == Opcode::CMov as u32 => {
+            instructions::conditional_move(A_val, B_val, C_val);
             format!(
                 "if (r{} != 0) r{} := r{};",
                 get(&RC, inst),
@@ -53,14 +60,17 @@ pub fn disassemble(inst: Umi) -> String {
         }
 
         o if o == Opcode::Load as u32 => {
+            instructions::segmented_load(A_val, B_val, C_val);
             format!("Load r{};", get(&RL, inst),)
         }
 
         o if o == Opcode::Store as u32 => {
+            instructions::segmented_store(A_val, B_val, C_val);
             format!("Store r{};", get(&VL, inst),)
         }
 
         o if o == Opcode::Add as u32 => {
+            instructions::addition(A_val, B_val, C_val);
             format!(
                 "r{} := r{} + r{};",
                 get(&RA, inst),
@@ -70,6 +80,7 @@ pub fn disassemble(inst: Umi) -> String {
         }
 
         o if o == Opcode::Mul as u32 => {
+            instructions::multiplication(A_val, B_val, C_val);
             format!(
                 "r{} := r{} * r{};",
                 get(&RA, inst),
@@ -79,6 +90,7 @@ pub fn disassemble(inst: Umi) -> String {
         }
 
         o if o == Opcode::Div as u32 => {
+            instructions::division(A_val, B_val, C_val);
             format!(
                 "r{} := r{} / r{};",
                 get(&RA, inst),
@@ -88,6 +100,7 @@ pub fn disassemble(inst: Umi) -> String {
         }
 
         o if o == Opcode::Nand as u32 => {
+            instructions::bitwise_nand(A_val, B_val, C_val);
             format!(
                 "r{} := ~(r{} ^ r{});",
                 get(&RA, inst),
@@ -97,14 +110,17 @@ pub fn disassemble(inst: Umi) -> String {
         }
 
         o if o == Opcode::Halt as u32 => {
+            instructions::halt();
             format!("HALT;")
         }
 
         o if o == Opcode::MapSegment as u32 => {
+            instructions::map_segment(B_val, C_val);
             format!("MAP SEG r{};", get(&RC, inst),)
         }
 
         o if o == Opcode::UnmapSegment as u32 => {
+            instructions::unmap_segment(C_val);
             format!("UNMAP r{};", get(&RC, inst),)
         }
 
