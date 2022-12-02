@@ -1,5 +1,5 @@
-pub mod bitpack;
 pub mod disassembler;
 pub mod instructions;
-pub mod rum;
+pub mod um;
 pub mod rumload;
+pub mod tests;

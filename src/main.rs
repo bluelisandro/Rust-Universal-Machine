@@ -1,5 +1,5 @@
 use std::env;
-use Rust_Universal_Machine::rum::UniversalMachine;
+use Rust_Universal_Machine::um::UniversalMachine;
 use Rust_Universal_Machine::rumload;
 use Rust_Universal_Machine::disassembler;
 

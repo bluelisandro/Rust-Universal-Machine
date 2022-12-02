@@ -1,27 +1,29 @@
-use crate::rum::UniversalMachine;
+use crate::um::UniversalMachine;
 
 // if r[c] != 0, then r[A] := r[B]
-pub fn conditional_move(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
-    if UM.registers[0] != 0 {
-        UM.registers[A as usize] = UM.registers[B as usize];
+pub fn mov(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
+    if UM.r[C as usize] != 0 {
+        UM.r[A as usize] = UM.r[B as usize];
     }
 }
 
 // r[a] := m[r[B]][r[C]]
-pub fn segmented_load(A: u32, B: u32, C: u32) {}
+pub fn load(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
+    UM.r[A as usize] = UM.segments[UM.r[B as usize] as usize][UM.r[B as usize] as usize];
+}
 
 // m[r[A]][r[B]] := r[C]
-pub fn segmented_store(A: u32, B: u32, C: u32) {}
+pub fn store(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {}
 
 // r[A] := (r[B] + r[C]) mod 2^32
-pub fn addition(A: u32, B: u32, C: u32) {}
+pub fn add(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {}
 
 // r[A] := (r[B] + r[C]) mod 2^32
-pub fn multiplication(A: u32, B: u32, C: u32) {}
+pub fn mul(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {}
 
-pub fn division(A: u32, B: u32, C: u32) {}
+pub fn div(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {}
 
-pub fn bitwise_nand(A: u32, B: u32, C: u32) {}
+pub fn nand(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {}
 
 pub fn halt() {}
 
@@ -30,7 +32,7 @@ pub fn halt() {}
 // new segment is initialized to zero. A bit pattern
 // that is not all zeroes and does not identify any
 // currently mapped segment is placed in $r[B]
-pub fn map_segment(B: u32, C: u32) {
+pub fn map(UM: &mut UniversalMachine, B: u32, C: u32) {
 
 }
 
@@ -38,4 +40,4 @@ pub fn map_segment(B: u32, C: u32) {
 // The segment $m[$r[C]] is unmapped.
 // Future Map Segment instructions may reuse the
 // identifier $r[C].
-pub fn unmap_segment(C: u32) {}
+pub fn unmap(UM: &mut UniversalMachine, C: u32) {}

@@ -41,7 +41,7 @@ pub fn op(instruction: Umi) -> u32 {
     (instruction >> OP.lsb) & mask(OP.width)
 }
 
-use crate::rum::UniversalMachine;
+use crate::um::UniversalMachine;
 pub fn disassemble(UM: &mut UniversalMachine, inst: Umi) -> String {
     use crate::instructions;
 
@@ -51,7 +51,7 @@ pub fn disassemble(UM: &mut UniversalMachine, inst: Umi) -> String {
 
     match get(&OP, inst) {
         o if o == Opcode::CMov as u32 => {
-            instructions::conditional_move(UM, A_val, B_val, C_val);
+            instructions::mov(UM, A_val, B_val, C_val);
             format!(
                 "if (r{} != 0) r{} := r{};",
                 get(&RC, inst),
@@ -61,17 +61,17 @@ pub fn disassemble(UM: &mut UniversalMachine, inst: Umi) -> String {
         }
 
         o if o == Opcode::Load as u32 => {
-            instructions::segmented_load(A_val, B_val, C_val);
+            instructions::load(UM, A_val, B_val, C_val);
             format!("Load r{};", get(&RL, inst),)
         }
 
         o if o == Opcode::Store as u32 => {
-            instructions::segmented_store(A_val, B_val, C_val);
+            instructions::store(UM, A_val, B_val, C_val);
             format!("Store r{};", get(&VL, inst),)
         }
 
         o if o == Opcode::Add as u32 => {
-            instructions::addition(A_val, B_val, C_val);
+            instructions::add(UM, A_val, B_val, C_val);
             format!(
                 "r{} := r{} + r{};",
                 get(&RA, inst),
@@ -81,7 +81,7 @@ pub fn disassemble(UM: &mut UniversalMachine, inst: Umi) -> String {
         }
 
         o if o == Opcode::Mul as u32 => {
-            instructions::multiplication(A_val, B_val, C_val);
+            instructions::mul(UM, A_val, B_val, C_val);
             format!(
                 "r{} := r{} * r{};",
                 get(&RA, inst),
@@ -91,7 +91,7 @@ pub fn disassemble(UM: &mut UniversalMachine, inst: Umi) -> String {
         }
 
         o if o == Opcode::Div as u32 => {
-            instructions::division(A_val, B_val, C_val);
+            instructions::div(UM, A_val, B_val, C_val);
             format!(
                 "r{} := r{} / r{};",
                 get(&RA, inst),
@@ -101,7 +101,7 @@ pub fn disassemble(UM: &mut UniversalMachine, inst: Umi) -> String {
         }
 
         o if o == Opcode::Nand as u32 => {
-            instructions::bitwise_nand(A_val, B_val, C_val);
+            instructions::nand(UM, A_val, B_val, C_val);
             format!(
                 "r{} := ~(r{} ^ r{});",
                 get(&RA, inst),
@@ -116,12 +116,12 @@ pub fn disassemble(UM: &mut UniversalMachine, inst: Umi) -> String {
         }
 
         o if o == Opcode::MapSegment as u32 => {
-            instructions::map_segment(B_val, C_val);
+            instructions::map(UM, B_val, C_val);
             format!("MAP SEG r{};", get(&RC, inst),)
         }
 
         o if o == Opcode::UnmapSegment as u32 => {
-            instructions::unmap_segment(C_val);
+            instructions::unmap(UM, C_val);
             format!("UNMAP r{};", get(&RC, inst),)
         }
 
