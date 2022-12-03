@@ -1,3 +1,6 @@
+use std::process;
+
+#[allow(non_snake_case)]
 use crate::um::UniversalMachine;
 
 // if r[c] != 0, then r[A] := r[B]
@@ -13,19 +16,34 @@ pub fn load(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
 }
 
 // m[r[A]][r[B]] := r[C]
-pub fn store(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {}
+pub fn store(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
+    UM.segments[UM.r[B as usize] as usize][UM.r[B as usize] as usize] = UM.r[C as usize];
+}
 
 // r[A] := (r[B] + r[C]) mod 2^32
-pub fn add(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {}
+pub fn add(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
+    UM.r[A as usize] = UM.r[B as usize] + UM.r[C as usize];
+}
 
-// r[A] := (r[B] + r[C]) mod 2^32
-pub fn mul(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {}
+// r[A] := (r[B] * r[C]) mod 2^32
+pub fn mul(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
+    UM.r[A as usize] = UM.r[B as usize] * UM.r[C as usize];
+}
 
-pub fn div(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {}
+// r[A] := (r[B] / r[C]) mod 2^32
+pub fn div(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
+    UM.r[A as usize] = UM.r[B as usize] / UM.r[C as usize]; 
+}
 
-pub fn nand(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {}
+// r[A] := ~(r[B] ^ r[C]) mod 2^32
+pub fn nand(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
+    UM.r[A as usize] = !(UM.r[B as usize] ^ UM.r[C as usize]);
+}
 
-pub fn halt() {}
+// Stop UM
+pub fn halt() {
+    process::exit(0);
+}
 
 // A new segment is created with a number of words
 // equal to the value in $r[C]. Each word in the
@@ -33,7 +51,7 @@ pub fn halt() {}
 // that is not all zeroes and does not identify any
 // currently mapped segment is placed in $r[B]
 pub fn map(UM: &mut UniversalMachine, B: u32, C: u32) {
-
+    
 }
 
 // The new segment is mapped as $m[$r[B]].
