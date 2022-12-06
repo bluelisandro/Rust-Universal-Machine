@@ -4,12 +4,12 @@ pub struct Field {
     lsb: u32,
 }
 
-static RA: Field = Field { width: 3, lsb: 6 }; // A value
-static RB: Field = Field { width: 3, lsb: 3 }; // B value
-static RC: Field = Field { width: 3, lsb: 0 }; // C value
-static RL: Field = Field { width: 3, lsb: 25 }; // Load program location
-static VL: Field = Field { width: 25, lsb: 0 }; // Value
-static OP: Field = Field { width: 4, lsb: 28 }; // Opcode
+pub static RA: Field = Field { width: 3, lsb: 6 }; // A value
+pub static RB: Field = Field { width: 3, lsb: 3 }; // B value
+pub static RC: Field = Field { width: 3, lsb: 0 }; // C value
+pub static RL: Field = Field { width: 3, lsb: 25 }; // Load program location
+pub static VL: Field = Field { width: 25, lsb: 0 }; // Value
+pub static OP: Field = Field { width: 4, lsb: 28 }; // Opcode
 
 #[derive(Debug, PartialEq, Clone, Copy)]
 enum Opcode {

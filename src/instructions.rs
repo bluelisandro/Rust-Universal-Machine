@@ -1,7 +1,9 @@
-use std::process;
-
 #[allow(non_snake_case)]
+
+use std::process;
+use std::vec;
 use crate::um::UniversalMachine;
+use crate::disassembler::{get, Field, RA, RB, RC, RL, VL};
 
 // if r[c] != 0, then r[A] := r[B]
 pub fn mov(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
@@ -51,11 +53,15 @@ pub fn halt() {
 // that is not all zeroes and does not identify any
 // currently mapped segment is placed in $r[B]
 pub fn map(UM: &mut UniversalMachine, B: u32, C: u32) {
-    
+    // Push a new vector with rc_val zeroes to segments
+    let rc_val = get(&RC, UM.r[C as usize]);
+    UM.segments.push(vec![0; rc_val as usize]);
 }
 
 // The new segment is mapped as $m[$r[B]].
 // The segment $m[$r[C]] is unmapped.
 // Future Map Segment instructions may reuse the
 // identifier $r[C].
-pub fn unmap(UM: &mut UniversalMachine, C: u32) {}
+pub fn unmap(UM: &mut UniversalMachine, C: u32) {
+        
+}
