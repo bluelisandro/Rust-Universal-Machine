@@ -44,7 +44,8 @@ pub fn op(instruction: Umi) -> u32 {
 use crate::um::UniversalMachine;
 pub fn disassemble(UM: &mut UniversalMachine, inst: Umi) -> String {
     use crate::instructions;
-
+ 
+    // Gets actual integer values for A, B, C from instruction u32 word
     let A_val = get(&RA, inst);
     let B_val = get(&RB, inst);
     let C_val = get(&RC, inst);

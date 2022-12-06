@@ -14,12 +14,17 @@ pub fn mov(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
 
 // r[a] := m[r[B]][r[C]]
 pub fn load(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
-    UM.r[A as usize] = UM.segments[UM.r[B as usize] as usize][UM.r[B as usize] as usize];
+    let rb_val = UM.r[B as usize] as usize;
+    let rc_val = UM.r[C as usize] as usize;
+    UM.r[A as usize] = UM.segments[rb_val][rc_val];
 }
 
 // m[r[A]][r[B]] := r[C]
 pub fn store(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
-    UM.segments[UM.r[B as usize] as usize][UM.r[B as usize] as usize] = UM.r[C as usize];
+    let ra_val = UM.r[A as usize] as usize;
+    let rb_val = UM.r[B as usize] as usize;
+    let rc_val = UM.r[C as usize];
+    UM.segments[ra_val][rb_val] = rc_val;
 }
 
 // r[A] := (r[B] + r[C]) mod 2^32
