@@ -60,7 +60,12 @@ pub fn halt() {
 pub fn map(UM: &mut UniversalMachine, B: u32, C: u32) {
     // Push a new vector with rc_val zeroes to segments
     let rc_val = get(&RC, UM.r[C as usize]);
-    UM.segments.push(vec![0; rc_val as usize]);
+
+    // Check if we already have any empty segments
+    
+
+
+    // UM.segments.push(vec![0; rc_val as usize]);
 }
 
 // The new segment is mapped as $m[$r[B]].
@@ -68,5 +73,5 @@ pub fn map(UM: &mut UniversalMachine, B: u32, C: u32) {
 // Future Map Segment instructions may reuse the
 // identifier $r[C].
 pub fn unmap(UM: &mut UniversalMachine, C: u32) {
-        
+    
 }
