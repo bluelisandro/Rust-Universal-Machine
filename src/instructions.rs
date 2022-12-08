@@ -52,26 +52,34 @@ pub fn halt() {
     process::exit(0);
 }
 
-// A new segment is created with a number of words
-// equal to the value in $r[C]. Each word in the
-// new segment is initialized to zero. A bit pattern
-// that is not all zeroes and does not identify any
-// currently mapped segment is placed in $r[B]
 pub fn map(UM: &mut UniversalMachine, B: u32, C: u32) {
-    // Push a new vector with rc_val zeroes to segments
-    let rc_val = get(&RC, UM.r[C as usize]);
+    // B is where we put the index storing the new segment
+    // C is our new segment word length
 
-    // Check if we already have any empty segments
-    
+    // Create a new vector with r[C] words
+    let rc_val = UM.r[C as usize];
+    let new_segment = vec![0_u32; rc_val as usize];
 
+    // Check if we already have any unmapped segments
+    if UM.free_segs.len() > 0 {
+        // If we do have an unmapped segment:
+            // -Push new segment vector to the unmapped segment index
+            // -Store the unmapped segment's index in r[B]
+        let unmapped_seg_index = *(UM.free_segs.get(0).unwrap());
+        UM.segments[unmapped_seg_index as usize] = new_segment;
+        UM.r[B as usize] = unmapped_seg_index;
+    }
+    else {
+        // If we don't have any empty segments, push a new one to the segments vec
+        UM.segments.push(new_segment);
+        
+        // The new segment index is the length of the segments vec
+        UM.r[B as usize] = (UM.segments.len() - 1) as u32;
+    }
 
-    // UM.segments.push(vec![0; rc_val as usize]);
 }
 
-// The new segment is mapped as $m[$r[B]].
-// The segment $m[$r[C]] is unmapped.
-// Future Map Segment instructions may reuse the
-// identifier $r[C].
 pub fn unmap(UM: &mut UniversalMachine, C: u32) {
-    
+    // To unmap a segment, simply add its index to the free_segs vector
+    UM.free_segs.push(UM.r[C as usize]);
 }

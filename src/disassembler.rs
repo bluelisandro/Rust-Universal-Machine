@@ -41,43 +41,45 @@ pub fn op(instruction: Umi) -> u32 {
     (instruction >> OP.lsb) & mask(OP.width)
 }
 
+// inc program counter before instruction is executed !!!
+
 use crate::um::UniversalMachine;
-pub fn disassemble(UM: &mut UniversalMachine, inst: Umi) -> String {
+pub fn disassemble(UM: &mut UniversalMachine, instruction: Umi) -> String {
     use crate::instructions;
  
     // Gets actual integer values for A, B, C from instruction u32 word
-    let A_val = get(&RA, inst);
-    let B_val = get(&RB, inst);
-    let C_val = get(&RC, inst);
+    let A_val = get(&RA, instruction);
+    let B_val = get(&RB, instruction);
+    let C_val = get(&RC, instruction);
 
-    match get(&OP, inst) {
+    match get(&OP, instruction) {
         o if o == Opcode::CMov as u32 => {
             instructions::mov(UM, A_val, B_val, C_val);
             format!(
                 "if (r{} != 0) r{} := r{};",
-                get(&RC, inst),
-                get(&RA, inst),
-                get(&RB, inst)
+                get(&RC, instruction),
+                get(&RA, instruction),
+                get(&RB, instruction)
             )
         }
 
         o if o == Opcode::Load as u32 => {
             instructions::load(UM, A_val, B_val, C_val);
-            format!("Load r{};", get(&RL, inst),)
+            format!("Load r{};", get(&RL, instruction),)
         }
 
         o if o == Opcode::Store as u32 => {
             instructions::store(UM, A_val, B_val, C_val);
-            format!("Store r{};", get(&VL, inst),)
+            format!("Store r{};", get(&VL, instruction),)
         }
 
         o if o == Opcode::Add as u32 => {
             instructions::add(UM, A_val, B_val, C_val);
             format!(
                 "r{} := r{} + r{};",
-                get(&RA, inst),
-                get(&RB, inst),
-                get(&RC, inst)
+                get(&RA, instruction),
+                get(&RB, instruction),
+                get(&RC, instruction)
             )
         }
 
@@ -85,9 +87,9 @@ pub fn disassemble(UM: &mut UniversalMachine, inst: Umi) -> String {
             instructions::mul(UM, A_val, B_val, C_val);
             format!(
                 "r{} := r{} * r{};",
-                get(&RA, inst),
-                get(&RB, inst),
-                get(&RC, inst)
+                get(&RA, instruction),
+                get(&RB, instruction),
+                get(&RC, instruction)
             )
         }
 
@@ -95,9 +97,9 @@ pub fn disassemble(UM: &mut UniversalMachine, inst: Umi) -> String {
             instructions::div(UM, A_val, B_val, C_val);
             format!(
                 "r{} := r{} / r{};",
-                get(&RA, inst),
-                get(&RB, inst),
-                get(&RC, inst)
+                get(&RA, instruction),
+                get(&RB, instruction),
+                get(&RC, instruction)
             )
         }
 
@@ -105,9 +107,9 @@ pub fn disassemble(UM: &mut UniversalMachine, inst: Umi) -> String {
             instructions::nand(UM, A_val, B_val, C_val);
             format!(
                 "r{} := ~(r{} ^ r{});",
-                get(&RA, inst),
-                get(&RB, inst),
-                get(&RC, inst)
+                get(&RA, instruction),
+                get(&RB, instruction),
+                get(&RC, instruction)
             )
         }
 
@@ -118,28 +120,28 @@ pub fn disassemble(UM: &mut UniversalMachine, inst: Umi) -> String {
 
         o if o == Opcode::MapSegment as u32 => {
             instructions::map(UM, B_val, C_val);
-            format!("MAP SEG r{};", get(&RC, inst),)
+            format!("MAP SEG r{};", get(&RC, instruction),)
         }
 
         o if o == Opcode::UnmapSegment as u32 => {
             instructions::unmap(UM, C_val);
-            format!("UNMAP r{};", get(&RC, inst),)
+            format!("UNMAP r{};", get(&RC, instruction),)
         }
 
         o if o == Opcode::Output as u32 => {
-            format!("OUTPUT: r{};", get(&RC, inst),)
+            format!("OUTPUT: r{};", get(&RC, instruction),)
         }
 
         o if o == Opcode::Input as u32 => {
-            format!("INPUT: r{};", get(&RC, inst),)
+            format!("INPUT: r{};", get(&RC, instruction),)
         }
 
         o if o == Opcode::LoadProgram as u32 => {
-            format!("LOAD PROGRAM r{};", get(&RB, inst))
+            format!("LOAD PROGRAM r{};", get(&RB, instruction))
         }
 
         o if o == Opcode::LoadValue as u32 => {
-            format!("LOAD VALUE r{};", get(&VL, inst),)
+            format!("LOAD VALUE r{};", get(&VL, instruction),)
         }
 
         _ => format!("ERROR: INVALID OPCODE!"),
