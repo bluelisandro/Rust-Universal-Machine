@@ -1,7 +1,7 @@
 type Umi = u32;
 pub struct Field {
-    width: u32,
-    lsb: u32,
+    pub width: u32,
+    pub lsb: u32,
 }
 
 pub static RA: Field = Field { width: 3, lsb: 6 }; // A value
@@ -46,7 +46,7 @@ pub fn op(instruction: Umi) -> u32 {
 use crate::um::UniversalMachine;
 pub fn disassemble(UM: &mut UniversalMachine, instruction: Umi) -> String {
     use crate::instructions;
- 
+
     // Gets actual integer values for A, B, C from instruction u32 word
     let A_val = get(&RA, instruction);
     let B_val = get(&RB, instruction);

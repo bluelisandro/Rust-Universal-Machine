@@ -1,7 +1,8 @@
+#![allow(non_snake_case)]
 use std::env;
-use Rust_Universal_Machine::um::UniversalMachine;
-use Rust_Universal_Machine::rumload;
 use Rust_Universal_Machine::disassembler;
+use Rust_Universal_Machine::rumload;
+use Rust_Universal_Machine::um::UniversalMachine;
 
 fn main() {
     let input = env::args().nth(1);

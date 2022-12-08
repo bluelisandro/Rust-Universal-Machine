@@ -1,11 +1,9 @@
-#[allow(non_snake_case)]
-
+use crate::disassembler::{get, Field};
+use crate::um::UniversalMachine;
+use std::io::stdin;
+use std::num::Wrapping;
 use std::process;
 use std::vec;
-use crate::um::UniversalMachine;
-use crate::disassembler::{get, Field, RA, RB, RC, RL, VL};
-use std::io::{self, stdin};
-use std::num::Wrapping;
 
 /// if r[c] != 0, then r[A] := r[B]
 pub fn cmov(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
@@ -39,12 +37,11 @@ pub fn add(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
 pub fn mul(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
     // UM.r[A as usize] = UM.r[B as usize] * UM.r[C as usize];
     UM.r[A as usize] = Wrapping(UM.r[B as usize] * UM.r[C as usize]).0; // What's happening here? Good Question.
-
 }
 
 /// r[A] := (r[B] / r[C]) mod 2^32
 pub fn div(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
-    // UM.r[A as usize] = UM.r[B as usize] / UM.r[C as usize]; 
+    // UM.r[A as usize] = UM.r[B as usize] / UM.r[C as usize];
     UM.r[A as usize] = Wrapping(UM.r[B as usize] / UM.r[C as usize]).0; // What's happening here? Good Question.
 }
 
@@ -71,20 +68,18 @@ pub fn map_seg(UM: &mut UniversalMachine, B: u32, C: u32) {
     // Check if we already have any unmapped segments
     if UM.free_segs.len() > 0 {
         // If we do have an unmapped segment:
-            // -Push new segment vector to the unmapped segment index
-            // -Store the unmapped segment's index in r[B]
+        // -Push new segment vector to the unmapped segment index
+        // -Store the unmapped segment's index in r[B]
         let unmapped_seg_index = *(UM.free_segs.get(0).unwrap());
         UM.segments[unmapped_seg_index as usize] = new_segment;
         UM.r[B as usize] = unmapped_seg_index;
-    }
-    else {
+    } else {
         // If we don't have any empty segments, push a new one to the segments vec
         UM.segments.push(new_segment);
-        
+
         // The new segment index is the length of the segments vec
         UM.r[B as usize] = (UM.segments.len() - 1) as u32;
     }
-
 }
 
 /// Unmap segment in r[c].
@@ -95,7 +90,7 @@ pub fn unmap_seg(UM: &mut UniversalMachine, C: u32) {
     UM.free_segs.push(UM.r[C as usize]);
 }
 
-/// The value in $r[C] is displayed on the I/O device immediately. 
+/// The value in $r[C] is displayed on the I/O device immediately.
 /// Only values from 0 to 255 are allowed.
 pub fn output(UM: &mut UniversalMachine, C: u32) {
     println!("{}", UM.r[C as usize]);
@@ -108,7 +103,9 @@ pub fn output(UM: &mut UniversalMachine, C: u32) {
 // with a full 32-bit word in which every bit is 1.
 pub fn input(UM: &mut UniversalMachine, C: u32) {
     let mut input_string = String::new();
-    stdin().read_line(&mut input_string).expect("Invalid input!");
+    stdin()
+        .read_line(&mut input_string)
+        .expect("Invalid input!");
 
     // Input must be value from 0 to 255
     let input_val: u32 = input_string.parse().expect("Invalid input!");
@@ -128,8 +125,11 @@ pub fn load_program(UM: &mut UniversalMachine, B: u32, C: u32) {
     UM.program_counter = UM.segments[0][UM.r[C as usize] as usize]
 }
 
-/// Store value found in 25 least signficant bits into r[X],
-/// where X is 3 bits wide, LSB 26 (which is 3 bits less signficant than opcode field)
+/// Load Y into r[X].
+/// Where X is the 3 bits less significant than the opcode field, which represents a register.
+/// Where Y is the remaining 25 bits, which represent a value.
 pub fn load_value(UM: &mut UniversalMachine, C: u32) {
-    
+    let X = get(&Field { width: 3, lsb: 7 }, UM.r[C as usize]);
+    let Y = get(&Field { width: 25, lsb: 0 }, UM.r[C as usize]);
+    UM.r[X as usize] = Y;
 }

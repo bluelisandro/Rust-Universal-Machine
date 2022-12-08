@@ -9,7 +9,7 @@ pub struct UniversalMachine {
     pub free_segs: Vec<u32>,
 
     // Program counter
-    pub program_counter: u32
+    pub program_counter: u32,
 }
 
 impl UniversalMachine {
@@ -18,7 +18,7 @@ impl UniversalMachine {
             r: Vec::with_capacity(8),
             segments: vec![Vec::new()],
             free_segs: Vec::new(),
-            program_counter: 0
+            program_counter: 0,
         }
     }
 }
