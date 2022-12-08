@@ -5,6 +5,7 @@ use std::vec;
 use crate::um::UniversalMachine;
 use crate::disassembler::{get, Field, RA, RB, RC, RL, VL};
 use std::io::{self, stdin};
+use std::num::Wrapping;
 
 /// if r[c] != 0, then r[A] := r[B]
 pub fn cmov(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
@@ -30,22 +31,27 @@ pub fn seg_store(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
 
 /// r[A] := (r[B] + r[C]) mod 2^32
 pub fn add(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
-    UM.r[A as usize] = UM.r[B as usize] + UM.r[C as usize];
+    // UM.r[A as usize] = UM.r[B as usize] + UM.r[C as usize];
+    UM.r[A as usize] = Wrapping(UM.r[B as usize] + UM.r[C as usize]).0; // What's happening here? Good Question.
 }
 
 /// r[A] := (r[B] * r[C]) mod 2^32
 pub fn mul(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
-    UM.r[A as usize] = UM.r[B as usize] * UM.r[C as usize];
+    // UM.r[A as usize] = UM.r[B as usize] * UM.r[C as usize];
+    UM.r[A as usize] = Wrapping(UM.r[B as usize] * UM.r[C as usize]).0; // What's happening here? Good Question.
+
 }
 
 /// r[A] := (r[B] / r[C]) mod 2^32
 pub fn div(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
-    UM.r[A as usize] = UM.r[B as usize] / UM.r[C as usize]; 
+    // UM.r[A as usize] = UM.r[B as usize] / UM.r[C as usize]; 
+    UM.r[A as usize] = Wrapping(UM.r[B as usize] / UM.r[C as usize]).0; // What's happening here? Good Question.
 }
 
 /// r[A] := ~(r[B] ^ r[C]) mod 2^32
 pub fn nand(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
-    UM.r[A as usize] = !(UM.r[B as usize] ^ UM.r[C as usize]);
+    // UM.r[A as usize] = !(UM.r[B as usize] ^ UM.r[C as usize]);
+    UM.r[A as usize] = Wrapping(!(UM.r[B as usize] ^ UM.r[C as usize])).0;
 }
 
 /// Exit RUM
@@ -125,5 +131,5 @@ pub fn load_program(UM: &mut UniversalMachine, B: u32, C: u32) {
 /// Store value found in 25 least signficant bits into r[X],
 /// where X is 3 bits wide, LSB 26 (which is 3 bits less signficant than opcode field)
 pub fn load_value(UM: &mut UniversalMachine, C: u32) {
-
+    
 }
