@@ -1,4 +1,4 @@
-use crate::disassembler::{get, Field};
+use crate::disassembler::*;
 use crate::um::UniversalMachine;
 use std::io::stdin;
 use std::num::Wrapping;
@@ -129,7 +129,8 @@ pub fn load_program(UM: &mut UniversalMachine, B: u32, C: u32) {
 /// Where X is the 3 bits less significant than the opcode field, which represents a register.
 /// Where Y is the remaining 25 bits, which represent a value.
 pub fn load_value(UM: &mut UniversalMachine, C: u32) {
-    let X = get(&Field { width: 3, lsb: 7 }, UM.r[C as usize]);
-    let Y = get(&Field { width: 25, lsb: 0 }, UM.r[C as usize]);
+    let X = get(&RL, C);
+    let Y = get(&VL, C);
+
     UM.r[X as usize] = Y;
 }

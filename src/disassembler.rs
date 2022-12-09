@@ -147,7 +147,7 @@ pub fn disassemble(UM: &mut UniversalMachine, instruction: Umi) -> String {
         }
 
         o if o == Opcode::LoadValue as u32 => {
-            instructions::load_value(UM, C_val);
+            instructions::load_value(UM, instruction);
             format!("LOAD VALUE r{};", get(&VL, instruction),)
         }
 
