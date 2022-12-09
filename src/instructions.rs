@@ -29,20 +29,21 @@ pub fn seg_store(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
 
 /// r[A] := (r[B] + r[C]) mod 2^32
 pub fn add(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
-    // UM.r[A as usize] = UM.r[B as usize] + UM.r[C as usize];
-    UM.r[A as usize] = Wrapping(UM.r[B as usize] + UM.r[C as usize]).0; // What's happening here? Good Question.
+    UM.r[A as usize] = UM.r[B as usize].wrapping_add(UM.r[C as usize]);
 }
 
 /// r[A] := (r[B] * r[C]) mod 2^32
 pub fn mul(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
-    // UM.r[A as usize] = UM.r[B as usize] * UM.r[C as usize];
-    UM.r[A as usize] = Wrapping(UM.r[B as usize] * UM.r[C as usize]).0; // What's happening here? Good Question.
+    UM.r[A as usize] = UM.r[B as usize].wrapping_mul(UM.r[C as usize]); 
 }
 
 /// r[A] := (r[B] / r[C]) mod 2^32
 pub fn div(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
-    // UM.r[A as usize] = UM.r[B as usize] / UM.r[C as usize];
-    UM.r[A as usize] = Wrapping(UM.r[B as usize] / UM.r[C as usize]).0; // What's happening here? Good Question.
+    if UM.r[C as usize] == 0 {
+        panic!("Dividing by 0!");
+    }
+
+    UM.r[A as usize] = UM.r[B as usize].wrapping_div(UM.r[C as usize]);
 }
 
 /// r[A] := ~(r[B] ^ r[C]) mod 2^32
