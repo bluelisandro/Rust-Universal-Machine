@@ -9,7 +9,7 @@ pub struct UniversalMachine {
     pub free_segs: Vec<u32>,
 
     // Program counter
-    pub program_counter: u32,
+    pub program_counter: usize,
 }
 
 impl UniversalMachine {
