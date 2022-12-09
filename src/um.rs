@@ -16,7 +16,7 @@ impl UniversalMachine {
     pub fn new() -> Self {
         Self {
             r: vec![0, 0, 0, 0, 0, 0, 0, 0],
-            segments: vec![Vec::new()],
+            segments: vec![vec![0; 10]],
             free_segs: Vec::new(),
             program_counter: 0,
         }

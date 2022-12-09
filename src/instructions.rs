@@ -1,6 +1,6 @@
 use crate::disassembler::*;
 use crate::um::UniversalMachine;
-use std::io::stdin;
+use std::io::*;
 use std::num::Wrapping;
 use std::process;
 use std::vec;
@@ -102,16 +102,10 @@ pub fn output(UM: &mut UniversalMachine, C: u32) {
 // of input has been signaled, then $r[C] is loaded
 // with a full 32-bit word in which every bit is 1.
 pub fn input(UM: &mut UniversalMachine, C: u32) {
-    let mut input_string = String::new();
-    stdin()
-        .read_line(&mut input_string)
-        .expect("Invalid input!");
-
-    // Input must be value from 0 to 255
-    let input_val: u32 = input_string.parse().expect("Invalid input!");
-    if input_val <= 255 {
-        UM.r[C as usize] = input_val;
-    }
+    match stdin().bytes().next() {
+        Some(input) => UM.r[C as usize] = input.unwrap() as u32,
+        None => UM.r[C as usize] = u32::MAX
+      }
 }
 
 // Segment $m[$r[B]] is duplicated, and the
@@ -121,6 +115,7 @@ pub fn input(UM: &mut UniversalMachine, C: u32) {
 // operation should be extremely quick, as this is
 // effectively a jump.
 pub fn load_program(UM: &mut UniversalMachine, B: u32, C: u32) {
+    // *UM.segments.get_mut(0).unwrap() = (*UM.segments.get(B as usize).unwrap()).clone();
     UM.segments[0] = UM.segments[B as usize].clone();
     UM.program_counter = UM.segments[0][UM.r[C as usize] as usize]
 }
