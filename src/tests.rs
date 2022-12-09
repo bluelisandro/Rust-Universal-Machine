@@ -7,6 +7,11 @@ mod tests {
     use crate::instructions;
 
     #[test]
+    fn conditional_move_test() {
+        
+    }
+
+    #[test]
     fn add_test() {
         let mut UM = UniversalMachine::new();
         let val1: u32 = 0b_0000_0010_0000_0000_0000_0000_0000_0001;
@@ -28,8 +33,19 @@ mod tests {
     #[test]
     fn mult_test() {
         let mut UM = UniversalMachine::new();
-        let val1: u32 = 0b_0000_0010_0000_0000_0000_0000_0000_0001;
+        let val1: u32 = 0b_0000_0010_0000_0000_0000_0000_0000_0011;
         let val2: u32 = 0b_0000_0100_0000_0000_0000_0000_0000_0011;
+        instructions::load_value(&mut UM, val1);
+        instructions::load_value(&mut UM, val2);
+        instructions::mul(&mut UM, 3, 1, 2);
+        assert_eq!(9, UM.r[3]);
+    }
+
+    #[test]
+    fn mult_overflow_check_test() {
+        let mut UM = UniversalMachine::new();
+        let val1: u32 = 0b_0000_0010_1111_1111_1111_1111_1111_1111;
+        let val2: u32 = 0b_0000_0100_1111_1111_1111_1111_1111_1111;
         instructions::load_value(&mut UM, val1);
         instructions::load_value(&mut UM, val2);
         instructions::mul(&mut UM, 3, 1, 2);
@@ -37,7 +53,16 @@ mod tests {
     }
 
     #[test]
-    fn mult_overflow_check_test() {
-
+    fn div_test() {
+        let mut UM = UniversalMachine::new();
+        let val1: u32 = 0b_0000_0010_1111_1111_1111_1111_1111_1111;
+        let val2: u32 = 0b_0000_0100_1111_1111_1111_1111_1111_1111;
+        instructions::load_value(&mut UM, val1);
+        instructions::load_value(&mut UM, val2);
+        instructions::div(&mut UM, 3, 1, 2);
+        assert_eq!(1, UM.r[3]);
     }
+
+
+
 }

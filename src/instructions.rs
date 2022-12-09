@@ -93,7 +93,7 @@ pub fn unmap_seg(UM: &mut UniversalMachine, C: u32) {
 /// The value in $r[C] is displayed on the I/O device immediately.
 /// Only values from 0 to 255 are allowed.
 pub fn output(UM: &mut UniversalMachine, C: u32) {
-    println!("{}", UM.r[C as usize]);
+    print!("{}", char::from_u32(UM.r[C as usize]).unwrap());
 }
 
 // The UM waits for input on the I/O device. When

@@ -10,7 +10,7 @@ fn main() {
     let mut cpu0 = UniversalMachine::new();
 
     for instruction in instructions {
-        println!("{}", disassembler::disassemble(&mut cpu0, instruction));
+        disassembler::disassemble(&mut cpu0, instruction);
     }
 
     // println!("{} instructions", instructions.len());
