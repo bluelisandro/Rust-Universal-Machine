@@ -15,7 +15,7 @@ pub struct UniversalMachine {
 impl UniversalMachine {
     pub fn new() -> Self {
         Self {
-            r: Vec::with_capacity(8),
+            r: vec![0, 0, 0, 0, 0, 0, 0, 0],
             segments: vec![Vec::new()],
             free_segs: Vec::new(),
             program_counter: 0,

@@ -131,5 +131,6 @@ pub fn load_program(UM: &mut UniversalMachine, B: u32, C: u32) {
 pub fn load_value(UM: &mut UniversalMachine, C: u32) {
     let X = get(&RL, C);
     let Y = get(&VL, C);
+
     UM.r[X as usize] = Y;
 }
