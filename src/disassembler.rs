@@ -41,11 +41,17 @@ pub fn op(instruction: Umi) -> u32 {
     (instruction >> OP.lsb) & mask(OP.width)
 }
 
-// inc program counter before instruction is executed !!!
+pub fn launch(UM: &mut UniversalMachine) {
+    loop {
+        disassemble(UM);
+    }
+}
 
 use crate::um::UniversalMachine;
-pub fn disassemble(UM: &mut UniversalMachine, instruction: Umi) {
+pub fn disassemble(UM: &mut UniversalMachine) {
     use crate::instructions;
+
+    let instruction = UM.segments[0][UM.program_counter];
 
     // Gets actual integer values for A, B, C from instruction u32 word
     let A_val = get(&RA, instruction);
@@ -113,6 +119,9 @@ pub fn disassemble(UM: &mut UniversalMachine, instruction: Umi) {
             instructions::load_value(UM, instruction);
         }
 
-        _ => panic!("Invalid Opcode!")
+        // _ => panic!("Invalid Opcode!")
+        _ => ()
     }
+
+    // dbg!(get(&OP, instruction));
 }

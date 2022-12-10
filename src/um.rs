@@ -9,15 +9,15 @@ pub struct UniversalMachine {
     pub free_segs: Vec<u32>,
 
     // Program counter
-    pub program_counter: u32,
+    pub program_counter: usize,
 }
 
 impl UniversalMachine {
     pub fn new() -> Self {
         Self {
-            r: vec![0, 0, 0, 0, 0, 0, 0, 0],
-            segments: vec![vec![0; 10]],
-            free_segs: Vec::new(),
+            r: vec![0; 8],
+            segments: vec![vec![]],
+            free_segs: vec![],
             program_counter: 0,
         }
     }
