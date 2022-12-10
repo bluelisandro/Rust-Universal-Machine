@@ -117,19 +117,6 @@ pub fn input(UM: &mut UniversalMachine, C: u32) {
 // operation should be extremely quick, as this is
 // effectively a jump.
 pub fn load_program(UM: &mut UniversalMachine, B: u32, C: u32) {
-    // *UM.segments.get_mut(0).unwrap() = (*UM.segments.get(B as usize).unwrap()).clone();
-
-    // if B >= UM.segments[B as usize].len() as u32 {
-    //     UM.segments[0] = UM.segments[B as usize].clone();
-    // }
-    // else {
-    //     UM.segments[0]
-    // }
-
-    // let rb_val = UM.r[B as usize];
-    // UM.segments[0] = UM.segments[UM.r[B as usize] as usize].clone();
-    // UM.program_counter = UM.segments[0][UM.r[C as usize] as usize]
-
     if UM.r[B as usize] == 0 {
         UM.program_counter = UM.r[C as usize] as usize;
       }
