@@ -6,7 +6,9 @@ use std::process;
 // use std::slice::SliceIndex;
 use std::vec;
 
-/// if r[C] != 0, then r[A] := r[B]
+/// if $r[C]= 0 then $r[A] := $r[B]
+/// Set value at register A equal to the value at register B if and only if the value at 
+/// register C does not equal 0.
 pub fn cmov(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
     if UM.r[C as usize] != 0 {
         UM.r[A as usize] = UM.r[B as usize];
@@ -14,6 +16,7 @@ pub fn cmov(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
 }
 
 /// r[A] := m[r[B]][r[C]]
+/// Set the value at register A equal to the value at segment [r[B]][r[C]]
 pub fn seg_load(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
     let rb_val = UM.r[B as usize] as usize;
     let rc_val = UM.r[C as usize] as usize;
@@ -21,6 +24,7 @@ pub fn seg_load(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
 }
 
 /// m[r[A]][r[B]] := r[C]
+/// Set the value of the segment at index r
 pub fn seg_store(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
     let ra_val = UM.r[A as usize] as usize;
     let rb_val = UM.r[B as usize] as usize;
@@ -32,16 +36,19 @@ pub fn seg_store(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
 }
 
 /// r[A] := (r[B] + r[C]) mod 2^32
+/// Add the values in registers B and C together and stores it into register A
 pub fn add(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
     UM.r[A as usize] = UM.r[B as usize].wrapping_add(UM.r[C as usize]);
 }
 
 /// r[A] := (r[B] * r[C]) mod 2^32
+/// Multiples the values in registers B and C and stores it into register A
 pub fn mul(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
     UM.r[A as usize] = UM.r[B as usize].wrapping_mul(UM.r[C as usize]); 
 }
 
 /// r[A] := (r[B] / r[C]) mod 2^32
+/// Divides the value at register B by the value at register C (must not equal 0) and stores it into register A
 pub fn div(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
     if UM.r[C as usize] == 0 {
         panic!("Dividing by 0!");
@@ -51,9 +58,9 @@ pub fn div(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
 }
 
 /// r[A] := ~(r[B] ^ r[C]) mod 2^32
+/// Perform bitwise AND operation and negates it. Stores result into register A
 pub fn nand(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
-    // UM.r[A as usize] = !(UM.r[B as usize] ^ UM.r[C as usize]);
-    UM.r[A as usize] = Wrapping(!(UM.r[B as usize] ^ UM.r[C as usize])).0;
+    UM.r[A as usize] = Wrapping(!(UM.r[B as usize] & UM.r[C as usize])).0;
 }
 
 /// Exit RUM
