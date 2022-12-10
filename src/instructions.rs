@@ -110,19 +110,9 @@ pub fn output(UM: &mut UniversalMachine, C: u32) {
 /// of input has been signaled, then $r[C] is loaded
 /// with a full 32-bit word in which every bit is 1.
 pub fn input(UM: &mut UniversalMachine, C: u32) {
-    // match stdin().bytes().next() {
-    //     Some(input) => UM.r[C as usize] = input.unwrap() as u32,
-    //     None => UM.r[C as usize] = u32::MAX
-    //   }
     match stdin().bytes().next() {
-        Some(value) => {
-            UM.r[C as usize] = value.unwrap() as u32;
-            // UM.program_counter += 1;
-        }
-        None => {
-          UM.r[C as usize] = !0 as u32;
-        //   UM.program_counter += 1;
-        }
+        Some(value) => UM.r[C as usize] = value.unwrap() as u32,
+        None => UM.r[C as usize] = !0 as u32
       }
 }
 
