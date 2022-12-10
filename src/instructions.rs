@@ -3,17 +3,17 @@ use crate::um::UniversalMachine;
 use std::io::*;
 use std::num::Wrapping;
 use std::process;
-use std::slice::SliceIndex;
+// use std::slice::SliceIndex;
 use std::vec;
 
-/// if r[c] != 0, then r[A] := r[B]
+/// if r[C] != 0, then r[A] := r[B]
 pub fn cmov(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
     if UM.r[C as usize] != 0 {
         UM.r[A as usize] = UM.r[B as usize];
     }
 }
 
-/// r[a] := m[r[B]][r[C]]
+/// r[A] := m[r[B]][r[C]]
 pub fn seg_load(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
     let rb_val = UM.r[B as usize] as usize;
     let rc_val = UM.r[C as usize] as usize;
@@ -75,7 +75,8 @@ pub fn map_seg(UM: &mut UniversalMachine, B: u32, C: u32) {
         // If we do have an unmapped segment:
         // -Push new segment vector to the unmapped segment index
         // -Store the unmapped segment's index in r[B]
-        let unmapped_seg_index = *(UM.free_segs.get(0).unwrap());
+        // let unmapped_seg_index = *(UM.free_segs.get(0).unwrap());
+        let unmapped_seg_index = UM.free_segs.pop().unwrap();
         UM.segments[unmapped_seg_index as usize] = new_segment;
         UM.r[B as usize] = unmapped_seg_index;
     } else {
@@ -103,11 +104,11 @@ pub fn output(UM: &mut UniversalMachine, C: u32) {
     print!("{}", r as char);
 }
 
-// The UM waits for input on the I/O device. When
-// input arrives, $r[c] is loaded with the input,
-// which must be a value from 0 to 255. If the end
-// of input has been signaled, then $r[C] is loaded
-// with a full 32-bit word in which every bit is 1.
+/// The UM waits for input on the I/O device. When
+/// input arrives, $r[c] is loaded with the input,
+/// which must be a value from 0 to 255. If the end
+/// of input has been signaled, then $r[C] is loaded
+/// with a full 32-bit word in which every bit is 1.
 pub fn input(UM: &mut UniversalMachine, C: u32) {
     // match stdin().bytes().next() {
     //     Some(input) => UM.r[C as usize] = input.unwrap() as u32,
@@ -157,9 +158,9 @@ pub fn load_program(UM: &mut UniversalMachine, B: u32, C: u32) {
 /// Load Y into r[X].
 /// Where X is the 3 bits less significant than the opcode field, which represents a register.
 /// Where Y is the remaining 25 bits, which represent a value.
-pub fn load_value(UM: &mut UniversalMachine, C: u32) {
-    let X = get(&RL, C);
-    let Y = get(&VL, C);
+pub fn load_value(UM: &mut UniversalMachine, word: u32) {
+    let X = get(&RL, word);
+    let Y = get(&VL, word);
 
     UM.r[X as usize] = Y;
 }
