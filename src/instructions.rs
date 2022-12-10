@@ -3,6 +3,7 @@ use crate::um::UniversalMachine;
 use std::io::*;
 use std::num::Wrapping;
 use std::process;
+use std::slice::SliceIndex;
 use std::vec;
 
 /// if r[c] != 0, then r[A] := r[B]
@@ -25,6 +26,9 @@ pub fn seg_store(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
     let rb_val = UM.r[B as usize] as usize;
     let rc_val = UM.r[C as usize];
     UM.segments[ra_val][rb_val] = rc_val;
+    
+    // let seg_ra = UM.segments.get_mut(ra_val).unwrap();
+    // *seg_ra.get_mut(rb_val).unwrap() = rc_val;
 }
 
 /// r[A] := (r[B] + r[C]) mod 2^32
