@@ -104,11 +104,11 @@ pub fn output(UM: &mut UniversalMachine, C: u32) {
     print!("{}", r as char);
 }
 
-// The UM waits for input on the I/O device. When
-// input arrives, $r[c] is loaded with the input,
-// which must be a value from 0 to 255. If the end
-// of input has been signaled, then $r[C] is loaded
-// with a full 32-bit word in which every bit is 1.
+/// The UM waits for input on the I/O device. When
+/// input arrives, $r[c] is loaded with the input,
+/// which must be a value from 0 to 255. If the end
+/// of input has been signaled, then $r[C] is loaded
+/// with a full 32-bit word in which every bit is 1.
 pub fn input(UM: &mut UniversalMachine, C: u32) {
     // match stdin().bytes().next() {
     //     Some(input) => UM.r[C as usize] = input.unwrap() as u32,
