@@ -1,6 +1,4 @@
 #![allow(unused_imports)]
-#![allow(unused_variables)]
-#![allow(dead_code)]
 
 mod tests {
     use crate::um::UniversalMachine;
@@ -178,8 +176,6 @@ mod tests {
 
         // Store the value in r[1] = 3, in segment[r[2]][r[4] = 1]
         instructions::seg_store(&mut UM, 2, 4, 1);
-
-        // assert_eq!(UM.segments[UM.r[2] as usize][1], 3);
 
         // Load seg[2][1] into r[6]
         instructions::seg_load(&mut UM, 6, 2, 4);

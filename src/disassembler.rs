@@ -119,9 +119,6 @@ pub fn disassemble(UM: &mut UniversalMachine) {
             instructions::load_value(UM, instruction);
         }
 
-        // _ => panic!("Invalid Opcode!")
         _ => ()
     }
-
-    // dbg!(get(&OP, instruction));
 }
