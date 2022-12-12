@@ -29,22 +29,19 @@ enum Opcode {
     LoadValue,    // 13
 }
 
+#[inline]
 fn mask(bits: u32) -> u32 {
     (1 << bits) - 1
 }
 
+#[inline]
 pub fn get(field: &Field, instruction: Umi) -> u32 {
     (instruction >> field.lsb) & mask(field.width)
 }
 
+#[inline]
 pub fn op(instruction: Umi) -> u32 {
     (instruction >> OP.lsb) & mask(OP.width)
-}
-
-pub fn launch(UM: &mut UniversalMachine) {
-    loop {
-        disassemble(UM);
-    }
 }
 
 use crate::um::UniversalMachine;
