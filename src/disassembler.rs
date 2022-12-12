@@ -29,17 +29,14 @@ enum Opcode {
     LoadValue,    // 13
 }
 
-#[inline]
 fn mask(bits: u32) -> u32 {
     (1 << bits) - 1
 }
 
-#[inline]
-pub fn get(field: &Field, instruction: Umi) -> u32 {
-    (instruction >> field.lsb) & mask(field.width)
+pub fn get(field: &Field, instruction: &Umi) -> u32 {
+    (*instruction >> field.lsb) & mask(field.width)
 }
 
-#[inline]
 pub fn op(instruction: Umi) -> u32 {
     (instruction >> OP.lsb) & mask(OP.width)
 }
@@ -48,7 +45,8 @@ use crate::um::UniversalMachine;
 pub fn disassemble(UM: &mut UniversalMachine) {
     use crate::instructions;
 
-    let instruction = UM.segments[0][UM.program_counter];
+    // let instruction = &UM.segments[0][UM.program_counter];
+    let instruction = UM.segments.get(0).unwrap().get(UM.program_counter).unwrap();
 
     // Gets actual integer values for A, B, C from instruction u32 word
     let A_val = get(&RA, instruction);
@@ -113,7 +111,7 @@ pub fn disassemble(UM: &mut UniversalMachine) {
         }
 
         o if o == Opcode::LoadValue as u32 => {
-            instructions::load_value(UM, instruction);
+            instructions::load_value(UM, *instruction);
         }
 
         _ => ()

@@ -1,4 +1,3 @@
-
 pub struct UniversalMachine {
     /// There are several invariants within our Rust Universal Machine.
     /// The first being the registers as we represent 8 machine registers as a vector. The indices from 0-7 represent each individual register

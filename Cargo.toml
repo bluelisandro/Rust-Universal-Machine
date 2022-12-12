@@ -8,7 +8,7 @@ edition = "2021"
 [dependencies]
 
 [profile.release]
-debug = true
+# debug = true
 lto = "fat"
 codegen-units = 1
 panic = "abort"
