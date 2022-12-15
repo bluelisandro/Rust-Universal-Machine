@@ -33,23 +33,23 @@ pub fn seg_store(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
 /// r[A] := (r[B] + r[C]) mod 2^32
 /// Add the values in registers B and C together and stores it into register A
 pub fn add(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
-    UM.r[A as usize] = UM.r[B as usize].wrapping_add(UM.r[C as usize]);
+    UM.r[A as usize] = UM.r[B as usize] + UM.r[C as usize];
 }
 
 /// r[A] := (r[B] * r[C]) mod 2^32
 /// Multiples the values in registers B and C and stores it into register A
 pub fn mul(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
-    UM.r[A as usize] = UM.r[B as usize].wrapping_mul(UM.r[C as usize]); 
+    UM.r[A as usize] = UM.r[B as usize] * UM.r[C as usize]; 
 }
 
 /// r[A] := (r[B] / r[C]) mod 2^32
 /// Divides the value at register B by the value at register C (must not equal 0) and stores it into register A
 pub fn div(UM: &mut UniversalMachine, A: u32, B: u32, C: u32) {
-    if UM.r[C as usize] == 0 {
-        panic!("Dividing by 0!");
-    }
+    //if UM.r[C as usize] == 0 {
+     //   panic!("Dividing by 0!");
+    //}
 
-    UM.r[A as usize] = UM.r[B as usize].wrapping_div(UM.r[C as usize]);
+    UM.r[A as usize] = UM.r[B as usize] / UM.r[C as usize];
 }
 
 /// r[A] := ~(r[B] ^ r[C]) mod 2^32
