@@ -33,7 +33,7 @@ fn mask(bits: u32) -> u32 {
     (1 << bits) - 1
 }
 
-pub fn get(field: &Field, instruction: &Umi) -> u32 {
+pub fn get(field: &Field, instruction: Umi) -> u32 {
     (instruction >> field.lsb) & mask(field.width)
 }
 
@@ -52,7 +52,7 @@ pub fn disassemble(UM: &mut UniversalMachine) {
     use crate::instructions;
 
     // let instruction = &UM.segments[0][UM.program_counter];
-    let instruction = UM.segments.get(0).unwrap().get(UM.program_counter).unwrap();
+    let instruction = *UM.segments.get(0).unwrap().get(UM.program_counter).unwrap();
 
     // Gets actual integer values for A, B, C from instruction u32 word
     let A_val = get(&RA, instruction);
@@ -62,33 +62,33 @@ pub fn disassemble(UM: &mut UniversalMachine) {
     // Increment program counter
     UM.program_counter += 1;
 
-    match get(&OP, instruction) {
+     match get(&OP, instruction) {
         o if o == Opcode::CMov as u32 => {
-            instructions::cmov(UM, &A_val, &B_val, &C_val);
+            instructions::cmov(UM, A_val, B_val, C_val);
         }
 
         o if o == Opcode::Load as u32 => {
-            instructions::seg_load(UM, &A_val, &B_val, &C_val);
+            instructions::seg_load(UM, A_val, B_val, C_val);
         }
 
         o if o == Opcode::Store as u32 => {
-            instructions::seg_store(UM, &A_val, &B_val, &C_val);
+            instructions::seg_store(UM, A_val, B_val, C_val);
         }
 
         o if o == Opcode::Add as u32 => {
-            instructions::add(UM, &A_val, &B_val, &C_val);
+            instructions::add(UM, A_val, B_val, C_val);
         }
 
         o if o == Opcode::Mul as u32 => {
-            instructions::mul(UM, &A_val, &B_val, &C_val);
+            instructions::mul(UM, A_val, B_val, C_val);
         }
 
         o if o == Opcode::Div as u32 => {
-            instructions::div(UM, &A_val, &B_val, &C_val);
+            instructions::div(UM, A_val, B_val, C_val);
         }
 
         o if o == Opcode::Nand as u32 => {
-            instructions::nand(UM, &A_val, &B_val, &C_val);
+            instructions::nand(UM, A_val, B_val, C_val);
         }
 
         o if o == Opcode::Halt as u32 => {
@@ -96,28 +96,28 @@ pub fn disassemble(UM: &mut UniversalMachine) {
         }
 
         o if o == Opcode::MapSegment as u32 => {
-            instructions::map_seg(UM, &B_val, &C_val);
+            instructions::map_seg(UM, B_val, C_val);
         }
 
         o if o == Opcode::UnmapSegment as u32 => {
-            instructions::unmap_seg(UM, &C_val);
+            instructions::unmap_seg(UM, C_val);
         }
 
         o if o == Opcode::Output as u32 => {
-            instructions::output(UM, &C_val);
+            instructions::output(UM, C_val);
         }
 
         o if o == Opcode::Input as u32 => {
-            instructions::input(UM, &C_val);
+            instructions::input(UM, C_val);
         }
 
         o if o == Opcode::LoadProgram as u32 => {
             UM.program_counter -= 1;
-            instructions::load_program(UM, &B_val, &C_val);
+            instructions::load_program(UM, B_val, C_val);
         }
 
         o if o == Opcode::LoadValue as u32 => {
-            instructions::load_value(UM, *instruction);
+            instructions::load_value(UM, instruction);
         }
 
         _ => ()

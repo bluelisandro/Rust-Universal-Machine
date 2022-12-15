@@ -8,6 +8,6 @@ edition = "2021"
 [dependencies]
 
 [profile.release]
-lto = "fat"
+# lto = "fat"
 #codegen-units = 1
 #panic = "abort"

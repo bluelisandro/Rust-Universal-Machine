@@ -1,0 +1,2 @@
+#!/bin/bash
+cargo build --release && hyperfine --warmup 3 './target/release/rum ./rum-binaries/midmark.um'
