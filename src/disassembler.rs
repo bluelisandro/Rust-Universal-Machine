@@ -29,18 +29,22 @@ enum Opcode {
     LoadValue,    // 13
 }
 
+#[inline(always)]
 fn mask(bits: u32) -> u32 {
     (1 << bits) - 1
 }
 
+// #[inline(always)]
 pub fn get(field: &Field, instruction: Umi) -> u32 {
     (instruction >> field.lsb) & mask(field.width)
 }
 
+// #[inline(always)]
 pub fn op(instruction: Umi) -> u32 {
     (instruction >> OP.lsb) & mask(OP.width)
 }
 
+// #[inline(always)]
 pub fn launch(UM: &mut UniversalMachine) {
     loop {
         disassemble(UM);
