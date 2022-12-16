@@ -1,8 +1,8 @@
 #![allow(non_snake_case)]
-use std::env;
 use rum::disassembler;
 use rum::rumload;
 use rum::um::UniversalMachine;
+use std::env;
 
 fn main() {
     let input = env::args().nth(1);

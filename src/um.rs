@@ -1,13 +1,12 @@
 pub struct UniversalMachine {
     /// There are several invariants within our Rust Universal Machine.
     /// The first being the registers as we represent 8 machine registers as a vector. The indices from 0-7 represent each individual register
-    /// The second invariant is the segments which represented segmented memory. It is represented as a 2D vector where the first index represents a 
+    /// The second invariant is the segments which represented segmented memory. It is represented as a 2D vector where the first index represents a
     /// memory segment and the second representing an offset at that memory segment. The third invariant is are the Opcode instructions that
-    /// the universal machine runs. There are 14 instructions which are Conditional Move, Segmented Load, Segmented Store, 
+    /// the universal machine runs. There are 14 instructions which are Conditional Move, Segmented Load, Segmented Store,
     /// Addition, Multiplication, Division, Bitwise NAND, Halt, Map Segment, Output, Input, Load Program, and Load Value. Our RUM has an individual
-    /// function to perform each of these unique operations. A fourth invariant would be our RUM's free_segs vector, where each index in the vector represents 
-    /// an unmapped memory segments in the machine. 
-
+    /// function to perform each of these unique operations. A fourth invariant would be our RUM's free_segs vector, where each index in the vector represents
+    /// an unmapped memory segments in the machine.
     // Registers vector, where each index represents a register
     pub r: Vec<u32>,
 
