@@ -14,7 +14,7 @@ mod tests {
         instructions::load_value(&mut UM, val_reg_1);
         instructions::load_value(&mut UM, val_reg_2);
 
-        instructions::cmov(&mut UM, 5, 2, 1);
+        instructions::cmov(&mut UM, &5, &2, &1);
         assert_eq!(15, UM.r[2]);
     }
 
@@ -27,7 +27,7 @@ mod tests {
         
         instructions::load_value(&mut UM, val_reg_6);
         instructions::load_value(&mut UM, val_reg_1);
-        instructions::cmov(&mut UM, 6, 1, 2);
+        instructions::cmov(&mut UM, &6, &1, &2);
         assert_eq!(1, UM.r[6]);
     }
 
@@ -40,7 +40,7 @@ mod tests {
 
         instructions::load_value(&mut UM, val_reg_1);
         instructions::load_value(&mut UM, val_reg_2);
-        instructions::add(&mut UM, 3, 1, 2);
+        instructions::add(&mut UM, &3, &1, &2);
         assert_eq!(4100, UM.r[3]);
     }
 
@@ -51,7 +51,7 @@ mod tests {
         UM.r[1] = u32::MAX;
         UM.r[2] = 1;
 
-        instructions::add(&mut UM, 3, 1, 2);
+        instructions::add(&mut UM, &3, &1, &2);
         assert_eq!(0, UM.r[3]);
     }
 
@@ -74,7 +74,7 @@ mod tests {
 
         instructions::load_value(&mut UM, val_reg_1);
         instructions::load_value(&mut UM, val_reg_2);
-        instructions::mul(&mut UM, 3, 1, 2);
+        instructions::mul(&mut UM, &3, &1, &2);
         assert_eq!(9, UM.r[3]);
     }
 
@@ -87,7 +87,7 @@ mod tests {
 
         instructions::load_value(&mut UM, val_reg_1);
         instructions::load_value(&mut UM, val_reg_2);
-        instructions::mul(&mut UM, 3, 1, 2);
+        instructions::mul(&mut UM, &3, &1, &2);
         assert_eq!(4261412865, UM.r[3]);
     }
 
@@ -100,7 +100,7 @@ mod tests {
 
         instructions::load_value(&mut UM, val_reg_1);
         instructions::load_value(&mut UM, val_reg_2);
-        instructions::div(&mut UM, 3, 1, 2);
+        instructions::div(&mut UM, &3, &1, &2);
         assert_eq!(1, UM.r[3]);
     }
 
@@ -111,7 +111,7 @@ mod tests {
         let val_reg_1: u32 = 0b_0000_0010_1111_1111_1111_1111_1111_1111;
 
         instructions::load_value(&mut UM, val_reg_1);
-        instructions::div(&mut UM, 6, 1, 2);
+        instructions::div(&mut UM, &6, &1, &2);
     }
 
     #[test]
@@ -126,16 +126,16 @@ mod tests {
 
         // Map the segment we want to access
         // B is the register index where we want map_seg to return the newly mapped segment index
-        instructions::map_seg(&mut UM, 2, 1);
+        instructions::map_seg(&mut UM, &2, &1);
 
         // So now, the index for our newly mapped segment should be in r[2]
 
         // Now store the value in r[1] = 3, into the segment index in r[2]
-        instructions::seg_store(&mut UM, 2, 0, 1);
+        instructions::seg_store(&mut UM, &2, &0, &1);
 
         // Load that segment's value into a register
         // Load segments[r[2]][0] into r[5]
-        instructions::seg_load(&mut UM, 3, 2, 0);
+        instructions::seg_load(&mut UM, &3, &2, &0);
 
         assert_eq!(UM.r[3], 3);
     }
@@ -163,7 +163,7 @@ mod tests {
         // Map the segment we want to access
         // r[B] is the register where we want map_seg to return the newly mapped segment index
         // r[C] is the capacity of the new segment
-        instructions::map_seg(&mut UM, 2, 5);
+        instructions::map_seg(&mut UM, &2, &5);
 
         // Value we want to check for:                r[1] = 3 
         // Index of newly mapped segment:             r[2]
@@ -172,13 +172,13 @@ mod tests {
         // Capacity to give map_seg for new segment : r[5] = 2
 
         // Store the value in r[1] = 3, in segment[r[2]][r[3] = 0]
-        instructions::seg_store(&mut UM, 2, 3, 1);
+        instructions::seg_store(&mut UM, &2, &3, &1);
 
         // Store the value in r[1] = 3, in segment[r[2]][r[4] = 1]
-        instructions::seg_store(&mut UM, 2, 4, 1);
+        instructions::seg_store(&mut UM, &2, &4, &1);
 
         // Load seg[2][1] into r[6]
-        instructions::seg_load(&mut UM, 6, 2, 4);
+        instructions::seg_load(&mut UM, &6, &2, &4);
 
         assert_eq!(UM.r[6], 3);
     }
